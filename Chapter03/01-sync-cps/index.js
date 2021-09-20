@@ -1,11 +1,7 @@
 /* eslint standard/no-callback-literal: 0 */
 
 function addCps(a, b, callback) {
-  callback(
-    (function (a, b) {
-      return a + b;
-    })(a, b)
-  );
+  callback(((a, b) => a + b)(a, b));
 }
 
 console.log('before');
