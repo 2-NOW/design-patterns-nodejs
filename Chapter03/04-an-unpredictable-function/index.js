@@ -28,18 +28,6 @@ function createFileReader(filename) {
 }
 
 const reader1 = createFileReader('data.txt');
-/*
-listeners = []
-
-inconsistentRead('data.txt', value => {
-  listeners.forEach(listener => listener(value))  
-})
-
-비동기로 readFile 하고 data가 cache에 set 됨.
-data => listeners.forEach(listener => listener(data))
-
-listener에 
-*/
 reader1.onDataReady((data) => {
   console.log(`First call data: ${data}`);
 
