@@ -50,3 +50,11 @@ reader1.onDataReady((data) => {
     console.log(`Second call data: ${data}`);
   });
 });
+
+/* 
+
+reader1은 캐싱이 되는동안 listener가 등록됨.
+reader2는 캐싱이 되어있어서 리스너 등록 전에 리스너가 호출됨.
+createfilereader는 호출 시 리스너를 비움.
+
+*/
