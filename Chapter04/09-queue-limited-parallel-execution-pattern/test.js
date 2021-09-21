@@ -11,6 +11,9 @@ function makeSampleTask(name) {
 }
 
 const queue = new TaskQueue(2);
+// queue에 concurrency 2
+// 두 줄
+// running, queue 비워줌
 
 // queue에서는 task들을 담아놨다.
 
