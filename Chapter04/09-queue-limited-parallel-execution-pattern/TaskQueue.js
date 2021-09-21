@@ -22,10 +22,10 @@ export class TaskQueue {
     }
   }
 }
-
-// nextTick은 이벤트루프에 nextTickqueue에 넣어줌
-// 이벤트루프가 돌면서 Timer queue나 등등 쭉 돌고
-// nextTickQueue 돌때 실행이 되는듯
+/*
+process.nextTick의 수행시점
+사용자의 동기코드 이후, 이벤트루프가 진행되기 이전의 시간
+*/
 
 /*
 queue를 쓰는 이유는
