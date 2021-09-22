@@ -1,50 +1,54 @@
-import { promises as fsPromises } from 'fs'
-import { dirname } from 'path'
-import superagent from 'superagent'
-import mkdirp from 'mkdirp'
-import { urlToFilename, getPageLinks } from './utils.js'
-import { promisify } from 'util'
+import { promises as fsPromises } from 'fs';
+import { dirname } from 'path';
+import superagent from 'superagent';
+import mkdirp from 'mkdirp';
+import { urlToFilename, getPageLinks } from './utils.js';
+import { promisify } from 'util';
 
-const mkdirpPromises = promisify(mkdirp)
+const mkdirpPromises = promisify(mkdirp);
+// mkdirp를 프로미스화
 
-function download (url, filename) {
-  console.log(`Downloading ${url}`)
-  let content
-  return superagent.get(url)
+function download(url, filename) {
+  console.log(`Downloading ${url}`);
+  let content;
+  return superagent
+    .get(url)
     .then((res) => {
-      content = res.text
-      return mkdirpPromises(dirname(filename))
+      content = res.text;
+      return mkdirpPromises(dirname(filename));
     })
     .then(() => fsPromises.writeFile(filename, content))
     .then(() => {
-      console.log(`Downloaded and saved: ${url}`)
-      return content
-    })
+      console.log(`Downloaded and saved: ${url}`);
+      return content;
+    });
 }
+// writeFile, readFile을 프라미스로 쓸 수 있게 프라미스 객체 임포트
 
-function spiderLinks (currentUrl, content, nesting) {
-  let promise = Promise.resolve()
+function spiderLinks(currentUrl, content, nesting) {
+  let promise = Promise.resolve();
   if (nesting === 0) {
-    return promise
+    return promise;
   }
-  const links = getPageLinks(currentUrl, content)
+  const links = getPageLinks(currentUrl, content);
   for (const link of links) {
-    promise = promise.then(() => spider(link, nesting - 1))
+    promise = promise.then(() => spider(link, nesting - 1));
   }
 
-  return promise
+  return promise;
 }
 
-export function spider (url, nesting) {
-  const filename = urlToFilename(url)
-  return fsPromises.readFile(filename, 'utf8')
+export function spider(url, nesting) {
+  const filename = urlToFilename(url);
+  return fsPromises
+    .readFile(filename, 'utf8')
     .catch((err) => {
       if (err.code !== 'ENOENT') {
-        throw err
+        throw err;
       }
 
       // The file doesn't exist, so let’s download it
-      return download(url, filename)
+      return download(url, filename);
     })
-    .then(content => spiderLinks(url, content, nesting))
+    .then((content) => spiderLinks(url, content, nesting));
 }
