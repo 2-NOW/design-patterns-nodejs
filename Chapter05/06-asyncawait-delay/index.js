@@ -1,24 +1,26 @@
-function delay (milliseconds) {
+function delay(milliseconds) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      resolve(new Date())
-    }, milliseconds)
-  })
+      resolve(new Date());
+    }, milliseconds);
+  });
 }
 
-async function playingWithDelays () {
-  console.log('Delaying...', new Date())
+async function playingWithDelays() {
+  console.log('Delaying...', new Date());
 
-  const dateAfterOneSecond = await delay(1000)
-  console.log(dateAfterOneSecond)
+  const dateAfterOneSecond = await delay(1000);
+  console.log(dateAfterOneSecond);
 
-  const dateAfterThreeSeconds = await delay(3000)
-  console.log(dateAfterThreeSeconds)
+  const dateAfterThreeSeconds = await delay(3000);
+  console.log(dateAfterThreeSeconds);
 
-  return 'done'
+  return 'done';
 }
+// 여기는 async await
 
-playingWithDelays()
-  .then(result => {
-    console.log(`After 4 seconds: ${result}`)
-  })
+playingWithDelays().then((result) => {
+  console.log(`After 4 seconds: ${result}`);
+});
+
+// 여기는 promise
