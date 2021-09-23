@@ -18,6 +18,9 @@ export class TaskQueue {
         this.running--;
         process.nextTick(this.next.bind(this));
       });
+
+      // apply call bind 차이
+      // makeSampleTest에서 cb에 여기 부분이 들어감
       this.running++;
     }
   }
