@@ -1,14 +1,16 @@
-export function createObservable (target, observer) {
+export function createObservable(target, observer) {
   const observable = new Proxy(target, {
-    set (obj, prop, value) {
+    set(obj, prop, value) {
       if (value !== obj[prop]) {
-        const prev = obj[prop]
-        obj[prop] = value
-        observer({ prop, prev, curr: value })
+        const prev = obj[prop];
+        obj[prop] = value;
+        observer({ prop, prev, curr: value });
       }
-      return true
-    }
-  })
+      return true;
+    },
+  });
 
-  return observable
+  return observable;
 }
+
+// 옵저버블 만들기
