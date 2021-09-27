@@ -1,15 +1,15 @@
-import { CheckUrls } from './checkUrls.js'
+import { CheckUrls } from './checkUrls.js';
 
-async function main () {
+async function main() {
   const checkUrls = new CheckUrls([
     'https://nodejsdesignpatterns.com',
     'https://example.com',
-    'https://mustbedownforsurehopefully.com'
-  ])
+    'https://mustbedownforsurehopefully.com',
+  ]);
 
   for await (const status of checkUrls) {
-    console.log(status)
+    console.log(status);
   }
 }
 
-main()
+main();

@@ -1,16 +1,18 @@
-import { inflateRaw, deflateRaw } from 'zlib'
-import { promisify } from 'util'
+import { inflateRaw, deflateRaw } from 'zlib';
+import { promisify } from 'util';
 
-const inflateRawAsync = promisify(inflateRaw)
-const deflateRawAsync = promisify(deflateRaw)
+const inflateRawAsync = promisify(inflateRaw);
+const deflateRawAsync = promisify(deflateRaw);
 
 export const zlibMiddleware = function () {
   return {
-    inbound (message) {
-      return inflateRawAsync(Buffer.from(message))
+    inbound(message) {
+      return inflateRawAsync(Buffer.from(message));
     },
-    outbound (message) {
-      return deflateRawAsync(message)
-    }
-  }
-}
+    // deserialize
+    outbound(message) {
+      return deflateRawAsync(message);
+    },
+    // serialize
+  };
+};
