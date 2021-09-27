@@ -1,46 +1,60 @@
-import { Worker } from 'worker_threads'
+import { Worker } from 'worker_threads';
 
 export class ThreadPool {
-  constructor (file, poolMax) {
-    this.file = file
-    this.poolMax = poolMax
-    this.pool = []
-    this.active = []
-    this.waiting = []
+  // processPool 대신 만드는 ThreadPool
+  constructor(file, poolMax) {
+    this.file = file;
+    this.poolMax = poolMax;
+    this.pool = [];
+    this.active = [];
+    this.waiting = [];
   }
 
-  acquire () {
+  acquire() {
     return new Promise((resolve, reject) => {
-      let worker
+      let worker;
       if (this.pool.length > 0) {
-        worker = this.pool.pop()
-        this.active.push(worker)
-        return resolve(worker)
+        worker = this.pool.pop();
+        this.active.push(worker);
+        return resolve(worker);
       }
 
       if (this.active.length >= this.poolMax) {
-        return this.waiting.push({ resolve, reject })
+        return this.waiting.push({ resolve, reject });
       }
-
-      worker = new Worker(this.file)
+      // 여기서부터 다름
+      worker = new Worker(this.file);
       worker.once('online', () => {
-        this.active.push(worker)
-        resolve(worker)
-      })
-      worker.once('exit', code => {
-        console.log(`Worker exited with code ${code}`)
-        this.active = this.active.filter(w => worker !== w)
-        this.pool = this.pool.filter(w => worker !== w)
-      })
-    })
+        this.active.push(worker);
+        resolve(worker);
+      });
+      /* 
+      process code
+
+      worker.once('message', (message) => {
+        if (message === 'ready') {
+          this.active.push(worker);
+          return resolve(worker);
+        }
+        worker.kill();
+        reject(new Error('Improper process start'));
+      });
+      
+      */
+      worker.once('exit', (code) => {
+        console.log(`Worker exited with code ${code}`);
+        this.active = this.active.filter((w) => worker !== w);
+        this.pool = this.pool.filter((w) => worker !== w);
+      });
+    });
   }
 
-  release (worker) {
+  release(worker) {
     if (this.waiting.length > 0) {
-      const { resolve } = this.waiting.shift()
-      return resolve(worker)
+      const { resolve } = this.waiting.shift();
+      return resolve(worker);
     }
-    this.active = this.active.filter(w => worker !== w)
-    this.pool.push(worker)
+    this.active = this.active.filter((w) => worker !== w);
+    this.pool.push(worker);
   }
 }
