@@ -37,7 +37,7 @@ export class SubsetSum extends EventEmitter {
       // 작업자 프로세스는 {event, data} 형식의 메세지를 생성
       // 자식 프로세스에 생성된 모든 이벤트를 전달, 재발송
     };
-
+    1;
     worker.on('message', onMessage);
     // 새로운 리스너를 만듬.
     // on 함수도 child_process 제공함수
